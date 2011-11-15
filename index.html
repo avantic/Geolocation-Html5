@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+        function initGeolocation() {
+			document.getElementById('map').style.display = "none";
+			document.getElementById('loading').style.display = "block";
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        }
+
+        function onSuccess(position){
+			document.getElementById('loading').style.display = "none";
+			var imageUrl = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + position.coords.latitude + "," +
+                    position.coords.longitude + "&zoom=14&size=300x400&markers=color:blue|label:S|" +
+                    position.coords.latitude + ',' + position.coords.longitude;
+            
+			alert(position.coords.latitude + ", " + position.coords.longitude);
+			document.getElementById('map').src = imageUrl;
+			document.getElementById('map').style.display = "block";
+        }		
+		
+        function onError(error)
+        {
+			document.getElementById('loading').style.display = "none";
+            switch(error.code)
+            {
+                case error.PERMISSION_DENIED: alert("No se ha permitido compartir los datos de geolocalización");
+                break;
+
+                case error.POSITION_UNAVAILABLE: alert("No se puede detectar la posición actual");
+                break;
+
+                case error.TIMEOUT: alert("Se ha superado el tiempo de espera");
+                break;
+
+                default: alert("Error desconocido");
+                break;
+            }
+        }
+		
+    </script>
+  </head>
+  <body>
+    <div>
+	  <span id="loading" style="display:none">Cargando...</span>
+      <button onclick="initGeolocation();">Buscar mi localización</button>
+    </div>
+	<img id="map" style="display:none"/>
+  </body>
+</html>
